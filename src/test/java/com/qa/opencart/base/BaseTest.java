@@ -33,7 +33,7 @@ public class BaseTest {
 	protected ProductInfoPage productInfoPage;
 	protected RegistrationPage registrationPage;
 
-	@Parameters({ "browser" })//fetching from .xml testNG runner file
+	@Parameters({ "browser" })//fetching the browser from .xml testNG runner file
 	@BeforeTest
 	public void setup(String browserName) {
 		df = new DriverFactory();
