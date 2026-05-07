@@ -41,7 +41,7 @@ public class BaseTest {
 
 		// browserName passed from .xml file
 		if (browserName != null) {
-			prop.setProperty("browser", browserName);// on the fly setting the browser name in config prop coming from  .xml file											
+			prop.setProperty("browser", browserName);// on the fly setting the browser name in config prop coming from  .xml file and fetching it back											
 		}
 
 		driver = df.initDriver(prop);
