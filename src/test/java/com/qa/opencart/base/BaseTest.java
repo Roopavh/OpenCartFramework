@@ -63,6 +63,6 @@ public class BaseTest {
 	@AfterTest
 	public void tearDown() {
 		driver.quit();
-		log.info("-------Closing browser-------");
+		log.info("-------Closing the browser-------");
 	}
 }
