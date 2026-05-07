@@ -33,7 +33,7 @@ public class BaseTest {
 	protected ProductInfoPage productInfoPage;
 	protected RegistrationPage registrationPage;
 
-	@Parameters({ "browser" })//fetching from .xml testNG runner file
+	@Parameters({ "browser" })//fetching the browser from .xml testNG runner file
 	@BeforeTest
 	public void setup(String browserName) {
 		df = new DriverFactory();
@@ -41,7 +41,7 @@ public class BaseTest {
 
 		// browserName passed from .xml file
 		if (browserName != null) {
-			prop.setProperty("browser", browserName);// on the fly setting the browser name in config prop coming from  .xml file											
+			prop.setProperty("browser", browserName);// on the fly setting the browser name in config prop coming from  .xml file and fetching it back											
 		}
 
 		driver = df.initDriver(prop);
