@@ -3,6 +3,7 @@ package com.qa.opencart.utils;
 public class Util {
 	public void login() {
 		System.out.println("Login feature-Vinmayi");
+		System.out.println("Login feature-Vinmayi");
 	}
 
 }
