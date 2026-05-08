@@ -2,7 +2,7 @@ package com.qa.opencart.utils;
 
 public class Util {
 
-	public void login() {
+	public void reg() {
 		System.out.println("Vinimaaaaaa");
 	}
 }
