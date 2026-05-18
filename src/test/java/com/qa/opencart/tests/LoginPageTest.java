@@ -22,7 +22,7 @@ import io.qameta.allure.Story;
 @Feature("F: 50 : Opencart -Login feature")
 @Epic("Epic : 001 : Design pages for Opencart application")
 @Story("US: 11: Implement login page for opencart application ")
-@Owner("Roopa")
+@Owner("Roopa Vinmayi")
 
 public class LoginPageTest extends BaseTest{
 	
