@@ -2,9 +2,7 @@ pipeline
 {
     agent any
     
-    tools{
-        maven 'maven'
-        }
+   
 
     stages 
     {
@@ -12,17 +10,18 @@ pipeline
         {
             steps
             {
-                 git 'https://github.com/jglick/simple-maven-project-with-tests.git'
-                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
+                 /*git 'https://github.com/jglick/simple-maven-project-with-tests.git'
+                 sh "mvn -Dmaven.test.failure.ignore=true clean package"*/
+                 echo("Dev Biuld")
             }
-            post 
+            /*post 
             {
                 success
                 {
-                    junit '**/target/surefire-reports/TEST-*.xml'
-                    archiveArtifacts 'target/*.jar'
+                    junit '*target/surefire-reports/TEST-*.xml'
+                    archiveArtifacts 'target.jar'
                 }
-            }
+            }*/
         }
         
         
@@ -39,15 +38,17 @@ pipeline
         stage('Regression Automation Tests') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    git 'https://github.com/naveenanimation20/Dec2024OpenCartFramework.git'
+                   /* git 'https://github.com/naveenanimation20/Dec2024OpenCartFramework.git'
                     sh "mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_regression.xml -Denv=qa"
-                    
+                    */
+                    echo("Regression Automation Tests")
+
                 }
             }
         }
                 
      
-        stage('Publish Allure Reports') {
+        /*stage('Publish Allure Reports') {
            steps {
                 script {
                     allure([
@@ -72,7 +73,7 @@ pipeline
                                   reportName: 'HTML Regression ChainTest Report', 
                                   reportTitles: ''])
             }
-        }
+        }*/
         
         stage("Deploy to Stage"){
             steps{
@@ -82,17 +83,19 @@ pipeline
         
         stage('Sanity Automation Test') {
             steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                /*catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     git 'https://github.com/naveenanimation20/Dec2024OpenCartFramework.git'
                     sh "mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_sanity.xml -Denv=stage"
-                    
+                    */
+                     echo("Sanity Automation Test")
+
                 }
             }
         }
         
         
         
-        stage('Publish sanity ChainTest Report'){
+       /* stage('Publish sanity ChainTest Report'){
             steps{
                      publishHTML([allowMissing: false,
                                   alwaysLinkToLastBuild: false, 
@@ -102,7 +105,7 @@ pipeline
                                   reportName: 'HTML Sanity ChainTest Report', 
                                   reportTitles: ''])
             }
-        }
+        }*/
         
         
         stage("Deploy to PROD"){
