@@ -23,7 +23,7 @@ pipeline
                 }
             }*/
         }
-     }   
+       
         
         
         stage("Deploy to QA"){
@@ -112,5 +112,6 @@ pipeline
             steps{
                 echo("deploy to PROD")
             }
+        }
         }
 }
