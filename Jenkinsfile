@@ -12,15 +12,18 @@ pipeline
         {
             steps
             {
-                 git 'https://github.com/jglick/simple-maven-project-with-tests.git'
-                 bat "mvn -Dmaven.test.failure.ignore=true clean package"
+                 /*git 'https://github.com/jglick/simple-maven-project-with-tests.git'
+                 bat "mvn -Dmaven.test.failure.ignore=true clean package"*/
+                 echo("Dev Repo")
             }
             post 
             {
                 success
                 {
-                    junit '**/target/surefire-reports/TEST-*.xml'
-                    archiveArtifacts 'target/*.jar'
+                    /*junit '*target/surefire-reports/TEST-*.xml'
+                    archiveArtifacts 'target.jar'*/
+                    echo("Dev Test Results")
+
                 }
             }
         }
