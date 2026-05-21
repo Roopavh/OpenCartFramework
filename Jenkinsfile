@@ -62,18 +62,6 @@ pipeline
         }
         
         
-        stage('Publish ChainTest Report'){
-            steps{
-                     publishHTML([allowMissing: false,
-                                  alwaysLinkToLastBuild: false, 
-                                  keepAll: true, 
-                                  reportDir: 'target/chaintest', 
-                                  reportFiles: 'Index.html', 
-                                  reportName: 'HTML Regression ChainTest Report', 
-                                  reportTitles: ''])
-            }
-        }
-        
         stage("Deploy to Stage"){
             steps{
                 echo("deploy to Stage")
