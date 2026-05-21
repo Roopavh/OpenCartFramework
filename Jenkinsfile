@@ -42,8 +42,8 @@ pipeline
         stage('Regression Automation Tests') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    git 'https://github.com/Roopavh/OpenCartFramework.git'
-                    bat "mvn clean test -Dsurefire.suiteXmlFile=src/test/resources/testrunners/testng_chrome.xml -Denv=qa"
+				git branch: 'main', url: 'https://github.com/Roopavh/OpenCartFramework.git'   
+				bat "mvn clean test -Dsurefire.suiteXmlFile=src/test/resources/testrunners/testng_chrome.xml -Denv=qa"
                     
                 }
             }
@@ -74,7 +74,7 @@ pipeline
         stage('Sanity Automation Test') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    git 'https://github.com/Roopavh/OpenCartFramework.git'
+                    git branch: 'main', url: 'https://github.com/Roopavh/OpenCartFramework.git'
                     bat "mvn clean test -Dsurefire.suiteXmlFile=src/test/resources/testrunners/testng_chrome.xml -Denv=stage"
                     
                 }
