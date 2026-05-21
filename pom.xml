@@ -135,8 +135,10 @@
 				<version>3.5.5</version>
 				<configuration>
 					<suiteXmlFiles>
-						<suiteXmlFile>
-							src/test/resources/testrunners/testng_chrome.xml</suiteXmlFile>
+						<!--<suiteXmlFile>
+							src/test/resources/testrunners/testng_chrome.xml</suiteXmlFile>-->
+						<suiteXmlFile>${suiteXmlFile}</suiteXmlFile>
+
 					</suiteXmlFiles>
 					<argLine>
 						-javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
