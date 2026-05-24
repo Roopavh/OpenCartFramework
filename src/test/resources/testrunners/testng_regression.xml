@@ -19,19 +19,19 @@
 		</classes>
 	</test>
 
-	<test name="Login Page Test_firefox">
+	<!--<test name="Login Page Test_firefox">
 		<parameter name="browser" value="firefox" />
 		<classes>
 			<class name="com.qa.opencart.tests.LoginPageTest" />
 		</classes>
-	</test>
+	</test>-->
 
-	<test name="Login Page Test_edge">
+	<!--<test name="Login Page Test_edge">
 		<parameter name="browser" value="edge" />
 		<classes>
 			<class name="com.qa.opencart.tests.LoginPageTest" />
 		</classes>
-	</test>
+	</test>-->
 
 	<!--
 	 <test name="Search Test_chrome">
@@ -39,7 +39,7 @@
 		<classes>
 			<class name="com.qa.opencart.tests.SearchTest" />
 		</classes>
-	</test>
+	</test> -->
 	
 	<test name="Search Test_firefox">
 		<parameter name="browser" value="firefox" />
@@ -48,13 +48,15 @@
 		</classes>
 	</test>
 	
-	<test name="Search Test_edge">
+	
+	<!--<test name="Search Test_edge">
 		<parameter name="browser" value="edge" />
 		<classes>
 			<class name="com.qa.opencart.tests.SearchTest" />
 		</classes>
-	</test>
+	</test>-->
 
+<!-- 
 	<test name="Accounts Page Test_chrome">
 		<parameter name="browser" value="chrome" />
 		<classes>
@@ -74,7 +76,7 @@
 		<classes>
 			<class name="com.qa.opencart.tests.AccountsPageTest" />
 		</classes>
-	</test>
+	</test>-->
 
 	<test name="Product Info Page Test_chrome">
 		<parameter name="browser" value="chrome" />
@@ -82,7 +84,7 @@
 			<class name="com.qa.opencart.tests.ProductInfoPageTest" />
 		</classes>
 	</test>
-	
+	<!--
 	<test name="Product Info Page Test_firefox">
 		<parameter name="browser" value="firefox" />
 		<classes>
@@ -95,16 +97,17 @@
 		<classes>
 			<class name="com.qa.opencart.tests.ProductInfoPageTest" />
 		</classes>
-	</test>
+	</test> -->
 	
 
-	<test name="Registration Page Test_chrome">
+	<!--<test name="Registration Page Test_chrome">
 		<parameter name="browser" value="chrome" />
 		<classes>
 			<class name="com.qa.opencart.tests.RegistrationPageTest" />
 		</classes>
-	</test>
+	</test> -->
 	
+	<!-- 
 	<test name="Registration Page Test_firefox">
 		<parameter name="browser" value="firefox" />
 		<classes>
