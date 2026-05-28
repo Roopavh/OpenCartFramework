@@ -3,7 +3,7 @@ pipeline
     agent any
     
     tools{
-        maven 'Maven'
+        maven 'maven'
         }
 
     stages 
@@ -12,18 +12,15 @@ pipeline
         {
             steps
             {
-                 /*git 'https://github.com/jglick/simple-maven-project-with-tests.git'
-                 bat "mvn -Dmaven.test.failure.ignore=true clean package"*/
-                 echo("Dev Repo")
+                 git 'https://github.com/jglick/simple-maven-project-with-tests.git'
+                 bat "mvn -Dmaven.test.failure.ignore=true clean package"
             }
             post 
             {
                 success
                 {
-                    /*junit '*target/surefire-reports/TEST-*.xml'
-                    archiveArtifacts 'target.jar'*/
-                    echo("Dev Test Results")
-
+                    junit '**/target/surefire-reports/TEST-*.xml'
+                    archiveArtifacts 'target/*.jar'
                 }
             }
         }
@@ -42,8 +39,8 @@ pipeline
         stage('Regression Automation Tests') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-				git branch: 'main', url: 'https://github.com/Roopavh/OpenCartFramework.git'   
-				bat "mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_chrome.xml -Denv=qa"
+                    git 'https://github.com/Roopavh/OpenCartFramework.git'
+                    bat "mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_regression.xml -Denv=qa"
                     
                 }
             }
@@ -65,6 +62,18 @@ pipeline
         }
         
         
+        stage('Publish ChainTest Report'){
+            steps{
+                     publishHTML([allowMissing: false,
+                                  alwaysLinkToLastBuild: false, 
+                                  keepAll: true, 
+                                  reportDir: 'target/chaintest', 
+                                  reportFiles: 'Index.html', 
+                                  reportName: 'HTML Regression ChainTest Report', 
+                                  reportTitles: ''])
+            }
+        }
+        
         stage("Deploy to Stage"){
             steps{
                 echo("deploy to Stage")
@@ -74,8 +83,8 @@ pipeline
         stage('Sanity Automation Test') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    git branch: 'main', url: 'https://github.com/Roopavh/OpenCartFramework.git'
-                    bat "mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_chrome.xml -Denv=stage"
+                    git 'https://github.com/Roopavh/OpenCartFramework.git'
+                    bat "mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_sanity.xml -Denv=stage"
                     
                 }
             }
