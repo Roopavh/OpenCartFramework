@@ -1,259 +1,119 @@
-pipeline {
-
+pipeline 
+{
     agent any
-
-    tools {
+    
+    tools{
         maven 'maven'
-    }
-
-    options {
-        timestamps()
-    }
-    stages {
-        //=========================================================
-        // BUILD SAMPLE PROJECT
-        //=========================================================
-        stage('Build Sample Project') {
-            steps {
-
-                dir('SampleProject') {
-
-                    git branch: 'master',
-                        url: 'https://github.com/jglick/simple-maven-project-with-tests.git'
-
-                    bat 'mvn clean test'
-
-                }
-
-            }
-
-            post {
-
-                always {
-
-                    junit 'SampleProject/target/surefire-reports/TEST-*.xml'
-
-                    archiveArtifacts artifacts: 'SampleProject/target/*.jar',
-                                     fingerprint: true
-
-                }
-
-            }
-
         }
 
-        //=========================================================
-        // BUILD OPENCART FRAMEWORK
-        //=========================================================
-
-        stage('Checkout OpenCart Framework') {
-
-            steps {
-
-                dir('OpenCartFramework') {
-
-                    git branch: 'main',
-                        url: 'https://github.com/Roopavh/OpenCartFramework.git'
+    stages 
+    {
+        stage('Build') 
+        {
+            steps
+            {
+				dir('sample-project'){
+                 git 'https://github.com/jglick/simple-maven-project-with-tests.git'
+                 bat "mvn -Dmaven.test.failure.ignore=true clean package"
+                 }
+            }
+            post 
+            {
+                success
+                {
+                    junit '**/target/surefire-reports/TEST-*.xml'
+                    archiveArtifacts 'target/*.jar'
                 }
             }
         }
-
-        //=========================================================
-        // DEPLOY QA
-        //=========================================================
-
-        stage('Deploy to QA') {
-
-            steps {
-
-                echo "Deploying application to QA..."
-
+        
+        
+        
+        stage("Deploy to QA"){
+            steps{
+                echo("deploy to qa done")
             }
         }
-
-        //=========================================================
-        // REGRESSION
-        //=========================================================
-
+        
+        
+        
+                
         stage('Regression Automation Tests') {
-
             steps {
-
-                dir('OpenCartFramework') {
-
-                    catchError(buildResult: 'SUCCESS',
-                               stageResult: 'FAILURE') {
-
-                        bat '''
-                        mvn clean test ^
-                        -DsuiteXmlFile=src/test/resources/testrunners/testng_regression.xml ^
-                        -Denv=qa
-                        '''
-
-                    }
+				dir('sample-project'){
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    git 'https://github.com/Roopavh/OpenCartFramework.git'
+            		bat "mvn clean test -DsuiteXmlFile=src/test/resources/testrunners/testng_regression.xml -Denv=qa"
+                   } 
                 }
             }
-
-            post {
-
-                always {
-
-                    junit allowEmptyResults: true,
-                          testResults: 'OpenCartFramework/target/surefire-reports/*.xml'
-
-                }
-
-            }
-
         }
-
-        //=========================================================
-        // ALLURE REPORT
-        //=========================================================
-
-        stage('Publish Allure Report') {
-
-            steps {
-
-                allure([
+                
+     
+        stage('Publish Allure Reports') {
+           steps {
+                script {
+                    allure([
                         includeProperties: false,
                         jdk: '',
                         properties: [],
                         reportBuildPolicy: 'ALWAYS',
-                        results: [[path: 'OpenCartFramework/allure-results']]
-                ])
-
-            }
-
-        }
-
-        //=========================================================
-        // CHAINTEST REPORT
-        //=========================================================
-
-        stage('Publish Regression ChainTest Report') {
-
-            steps {
-
-                publishHTML([
-                        allowMissing: true,
-                        alwaysLinkToLastBuild: true,
-                        keepAll: true,
-                        reportDir: 'OpenCartFramework/target/chaintest',
-                        reportFiles: 'Index.html',
-                        reportName: 'Regression ChainTest Report'
-                ])
-
-            }
-
-        }
-
-        //=========================================================
-        // DEPLOY STAGE
-        //=========================================================
-
-        stage('Deploy to Stage') {
-
-            steps {
-
-                echo "Deploying application to Stage..."
-
-            }
-
-        }
-
-        //=========================================================
-        // SANITY
-        //=========================================================
-
-        stage('Sanity Automation Tests') {
-
-            steps {
-
-                dir('OpenCartFramework') {
-
-                    catchError(buildResult: 'SUCCESS',
-                               stageResult: 'FAILURE') {
-
-                        bat '''
-                        mvn clean test ^
-                        -DsuiteXmlFile=src/test/resources/testrunners/testng_sanity.xml ^
-                        -Denv=stage
-                        '''
-
-                    }
-
+                        results: [[path: '/allure-results']]
+                    ])
                 }
-
             }
-
-            post {
-
-                always {
-
-                    junit allowEmptyResults: true,
-                          testResults: 'OpenCartFramework/target/surefire-reports/*.xml'
-
+        }
+        
+        
+        stage('Publish ChainTest Report'){
+            steps{
+                     publishHTML([allowMissing: false,
+                                  alwaysLinkToLastBuild: false, 
+                                  keepAll: true, 
+                                  reportDir: 'target/chaintest', 
+                                  reportFiles: 'Index.html', 
+                                  reportName: 'HTML Regression ChainTest Report', 
+                                  reportTitles: ''])
+            }
+        }
+        
+        stage("Deploy to Stage"){
+            steps{
+                echo("deploy to Stage")
+            }
+        }
+        
+        stage('Sanity Automation Test') {
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    git 'https://github.com/Roopavh/OpenCartFramework.git'
+                    bat "mvn clean test -DsuiteXmlFile=src/test/resources/testrunners/testng_sanity.xml -Denv=stage"
+                    
                 }
-
             }
-
         }
-
-        //=========================================================
-        // SANITY CHAINTEST
-        //=========================================================
-
-        stage('Publish Sanity ChainTest Report') {
-
-            steps {
-
-                publishHTML([
-                        allowMissing: true,
-                        alwaysLinkToLastBuild: true,
-                        keepAll: true,
-                        reportDir: 'OpenCartFramework/target/chaintest',
-                        reportFiles: 'Index.html',
-                        reportName: 'Sanity ChainTest Report'
-                ])
-
+        
+        
+        
+        stage('Publish sanity ChainTest Report'){
+            steps{
+                     publishHTML([allowMissing: false,
+                                  alwaysLinkToLastBuild: false, 
+                                  keepAll: true, 
+                                  reportDir: 'target/chaintest', 
+                                  reportFiles: 'Index.html', 
+                                  reportName: 'HTML Sanity ChainTest Report', 
+                                  reportTitles: ''])
             }
-
         }
-
-        //=========================================================
-        // DEPLOY PROD
-        //=========================================================
-
-        stage('Deploy to Production') {
-
-            steps {
-
-                echo "Deploying application to Production..."
-
+        
+        
+        stage("Deploy to PROD"){
+            steps{
+                echo("deploy to PROD")
             }
-
         }
-
+        
+        
     }
-
-    post {
-        always {
-            cleanWs()
-
-        }
-
-        success {
-
-            echo "Pipeline completed successfully."
-
-        }
-
-        failure {
-
-            echo "Pipeline completed with failures. Please review the reports."
-        }
-
-    }
-
 }
