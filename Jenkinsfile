@@ -13,7 +13,7 @@ pipeline
             steps
             {
                 dir('sample-project') {
-                    git 'https://github.com/jglick/simple-maven-project-with-tests.git'
+                    git branch: 'master', url: 'https://github.com/jglick/simple-maven-project-with-tests.git'
                     bat "mvn -Dmaven.test.failure.ignore=true clean package"
                 }
             }
@@ -37,7 +37,7 @@ pipeline
             steps {
                 dir('OpenCartFramework') {
                     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                        git 'https://github.com/Roopavh/OpenCartFramework.git'
+                        git branch: 'main', url: 'https://github.com/Roopavh/OpenCartFramework.git'
                         bat "mvn clean test -DsuiteXmlFile=src/test/resources/testrunners/testng_regression.xml -Denv=qa"
                     } 
                 }
@@ -82,7 +82,8 @@ pipeline
             steps {
                 dir('OpenCartFramework') {
                     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                        git 'https://github.com/Roopavh/OpenCartFramework.git'
+                        // Explicitly checking out the 'main' branch
+                        git branch: 'main', url: 'https://github.com/Roopavh/OpenCartFramework.git'
                         bat "mvn clean test -DsuiteXmlFile=src/test/resources/testrunners/testng_sanity.xml -Denv=stage"
                     }  
                 }
@@ -95,7 +96,6 @@ pipeline
                     allowMissing: false,
                     alwaysLinkToLastBuild: false, 
                     keepAll: true, 
-                    // Corrected directory location
                     reportDir: 'OpenCartFramework/target/chaintest', 
                     reportFiles: 'Index.html', 
                     reportName: 'HTML Sanity ChainTest Report', 
